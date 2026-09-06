@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEGAS Downtime Report</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f3f4f6;margin:0;padding:18px;color:#111827}
+.container{max-width:720px;margin:auto;background:white;padding:22px;border-radius:16px;box-shadow:0 3px 15px #0001}
+h1{text-align:center;margin-top:0} label{font-weight:bold;display:block;margin:14px 0 6px}
+select,input,textarea,button{width:100%;box-sizing:border-box;padding:12px;border:1px solid #d1d5db;border-radius:9px;font-size:16px}
+textarea{min-height:90px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{margin-top:18px;background:#111827;color:white;border:0;font-weight:bold;cursor:pointer}
+#summary{background:#f9fafb;padding:15px;border-radius:10px;margin-top:18px;white-space:pre-wrap;display:none}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>DEGAS Downtime Report</h1>
+
+<label>Machine</label>
+<input value="DEGAS" disabled>
+
+<label>Line</label>
+<select id="line">
+<option>2-1</option><option>2-2</option><option>3-1</option>
+<option>3-2</option><option>1-1</option><option>1-2</option>
+</select>
+
+<label>Area</label>
+<select id="area">
+<option>Loader</option><option>Degas Chamber</option><option>Main sealer</option>
+<option>Hot press</option><option>Unloader</option>
+</select>
+
+<label>Stop Type</label>
+<select id="stop">
+<option>BM</option><option>PD</option><option>Work preparation</option>
+<option>PM</option><option>Wait</option>
+</select>
+
+<div class="row">
+<div><label>Date</label><input type="date" id="date"></div>
+<div><label>Start Time</label><input type="time" id="time"></div>
+</div>
+
+<label>Issue Resolved</label>
+<select id="resolved"><option>Yes</option><option>No</option></select>
+
+<label>Alarm Name</label>
+<input id="alarm" placeholder="Enter alarm name">
+
+<label>Cause</label>
+<textarea id="cause" placeholder="Enter cause"></textarea>
+
+<label>Action Taken</label>
+<textarea id="action" placeholder="Enter action taken"></textarea>
+
+<button onclick="generate()">Generate Report</button>
+<button onclick="copyReport()">Copy Report</button>
+
+<div id="summary"></div>
+</div>
+
+<script>
+const d=new Date();
+document.getElementById('date').value=d.toISOString().slice(0,10);
+document.getElementById('time').value=d.toTimeString().slice(0,5);
+
+function generate(){
+ const text=`DEGAS DOWNTIME REPORT
+Machine: DEGAS
+Line: ${line.value}
+Area: ${area.value}
+Stop Type: ${stop.value}
+Date: ${date.value}
+Start Time: ${time.value}
+Issue Resolved: ${resolved.value}
+
+Alarm Name: ${alarm.value}
+Cause: ${cause.value}
+Action Taken: ${action.value}`;
+ const s=document.getElementById('summary'); s.textContent=text; s.style.display='block';
+}
+function copyReport(){
+ generate();
+ navigator.clipboard.writeText(document.getElementById('summary').textContent)
+ .then(()=>alert('Report copied!'));
+}
+</script>
+</body>
+</html>
